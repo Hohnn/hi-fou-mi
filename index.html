@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <title>Hi-Fou-Mi</title>
+</head>
+<body class="d-flex flex-column align-items-center">
+    <h1>Hi-Fou-Mi</h1>
+    <div class="my-5">
+        <button id="Pierre" type="button">Pierre</button>
+        <button id="Feuille" type="button">Feuille</button>
+        <button id="Ciseau" type="button">Ciseau</button>
+    </div>
+    <div id="output" class="output d-flex">
+        <div id="joueur" class="m-2 text-center"></div>
+        <div id="computer" class="m-2 text-center"></div>
+    </div>
+    <div id="finish"></div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+    <script>
+        let pc
+        function pcObject() {
+            const array = ['Pierre', 'Feuille', 'Ciseau']
+            let randomNum = Math.floor(Math.random() * array.length);
+            pc = array[randomNum]
+        }
+       
+        $("button").click(function () {
+            console.log($(this).attr("id"))
+            pcObject()
+            $('#joueur').html( 'Joueur <br>' + $(this).attr("id"))
+            $('#computer').html( 'PC <br>' + pc)
+            if ($(this).attr("id") == 'Pierre') {
+                if (pc == 'Pierre') {
+                    $('#finish').html('égalité !')
+                } else if (pc == 'Feuille') {
+                    $('#finish').html('Tu as perdu !')
+                } else if (pc == 'Ciseau') {
+                    $('#finish').html('Tu as gagné !')
+                }
+            }
+
+            if ($(this).attr("id") == 'Feuille') {
+                if (pc == 'Pierre') {
+                    $('#finish').html('Tu as gagné !')
+                } else if (pc == 'Feuille') {
+                    $('#finish').html('égalité !')
+                } else if (pc == 'Ciseau') {
+                    $('#finish').html('Tu as perdu !')
+                }
+            }
+
+            if ($(this).attr("id") == 'Ciseau') {
+                if (pc == 'Pierre') {
+                    $('#finish').html('Tu as perdu !')
+                } else if (pc == 'Feuille') {
+                    $('#finish').html('Tu as gagné !')
+                } else if (pc == 'Ciseau') {
+                    $('#finish').html('égalité !')
+                }
+            }
+            
+        })
+
+
+    </script>
+</body>
+</html>
