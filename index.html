@@ -8,35 +8,51 @@
     <link rel="stylesheet" href="./sass/style.css">
     <title>Hi-Fou-Mi</title>
 </head>
-<body class="container">
+<body class="container-lg position-relative pt-4">
     <h1 class="text-center">Hi Fou Mi</h1>
+    <div class="row result aling-items-center">
+        <div class="col-12 col-md-6">
+            <h2 id="allieEnd"></h2>
+        </div>
+        <div class="col-6 d-none d-md-block d-flex">
+            <h2 id="ennemyEnd" class="ms-auto"></h2>
+        </div>
+    </div>
     <div class="row cards d-flex">
+        <button id="restart" type="button">RESSAYER</button>
         <div class="col-6 my-5 choice d-flex flex-column">
-            <button id="Pierre" type="button">Pierre</button>
-            <button id="Feuille" type="button">Feuille</button>
-            <button id="Ciseau" type="button">Ciseau</button>
+            <div class="position-relative back">
+                <div id="finish">Prépare toi !</div>
+                <img id="good" class="samourai" src="./image/epee-samourai_157713-73.jpg" alt="">
+            </div>
+            <button id="Pierre" type="button" data-button><img src="./image/stone.svg" alt=""></button>
+            <button id="Feuille" type="button" data-button><img src="./image/leaf.svg" alt=""></button>
+            <button id="Ciseau" type="button" data-button><img src="./image/katana.svg" alt=""></button>
         </div>
         <div class="col-6 my-5 choice d-flex flex-column">
-            <button id="Pierre" type="button">Pierre</button>
-            <button id="Feuille" type="button">Feuille</button>
-            <button id="Ciseau" type="button">Ciseau</button>
+            <img id="bad" class="samourai d-none d-md-block" src="./image/guerrier-samourai_157713-74.jpg" alt="">
+            <button id="ennemyPierre" type="button"><img src="./image/stone.svg" alt=""></button>
+            <button id="ennemyFeuille" type="button"><img src="./image/leaf.svg" alt=""></button>
+            <button id="ennemyCiseau" type="button"><img src="./image/katana.svg" alt=""></button>
         </div>
     </div>
     
-    <div id="output" class="output d-flex">
-        <div id="joueur" class="m-2 text-center"></div>
-        <div id="computer" class="m-2 text-center"></div>
+    <div id="output" class="row output">
+        <div id="joueur" class="col m-2 text-center fs-4"></div>
+        <div id="computer" class="col m-2 text-center fs-4"></div>
+        <div id="round" class="col-12 text-center fs-2"></div>
     </div>
-    <div id="finish"></div>
-    <div id="round"></div>
-    <div class="winScreen">
-        <button type="button">Relancer</button>
-    </div>
+    <div class="moi position-absolute bottom-0">Hohnn, La Manu</div>
+    
+    
+    
     
 
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
     <script>
+        $("#restart").hide()
+        console.log($(".cards button"))
         let pc
         function pcObject() {
             const array = ['Pierre', 'Feuille', 'Ciseau']
@@ -48,56 +64,120 @@
         console.log(myDate)
         let scoreJoueur = 0
         let scorePc = 0
-        $(".choice button").click(function () {
-            console.log($(this).attr("id"))
+        $("button[data-button]").click(function () {
+            
             pcObject()
-            $('#joueur').html( 'Joueur <br>' + $(this).attr("id"))
-            $('#computer').html( 'PC <br>' + pc)
-            if ($(this).attr("id") == 'Pierre') {
-                if (pc == 'Pierre') {
-                    $('#finish').html('égalité !')
-                } else if (pc == 'Feuille') {
-                    $('#finish').html('Tu as perdu !')
-                    scorePc++
-                } else if (pc == 'Ciseau') {
-                    $('#finish').html('Tu as gagné !')
-                    scoreJoueur++
-                }
+            $(this).addClass('fight')
+            if (pc == 'Pierre') {
+                $("#ennemyPierre").addClass('ennemyFight')
+            } else if (pc == 'Feuille') {
+                $("#ennemyFeuille").addClass('ennemyFight')
+            } else if (pc == 'Ciseau') {
+                $("#ennemyCiseau").addClass('ennemyFight')
             }
-
-            if ($(this).attr("id") == 'Feuille') {
-                if (pc == 'Pierre') {
-                    $('#finish').html('Tu as gagné !')
-                    scoreJoueur++
-                } else if (pc == 'Feuille') {
-                    $('#finish').html('égalité !')
-                } else if (pc == 'Ciseau') {
-                    $('#finish').html('Tu as perdu !')
-                    scorePc++
-                }
-            }
-
-            if ($(this).attr("id") == 'Ciseau') {
-                if (pc == 'Pierre') {
-                    $('#finish').html('Tu as perdu !')
-                    scorePc++
-                } else if (pc == 'Feuille') {
-                    $('#finish').html('Tu as gagné !')
-                    scoreJoueur++
-                } else if (pc == 'Ciseau') {
-                    $('#finish').html('égalité !')
-                }
-            }
-
-            $('#round').html( scoreJoueur + ' - ' + scorePc)
+            $("#good").removeClass('hit')
+            $("#bad").removeClass('hit')
+            mytimeOut($(this))
             
         })
 
-        function WinCondition(params) {
-            if (scoreJoueur == 3) {
-                
+        function mytimeOut(params) {
+            setTimeout(function () {
+                $('#joueur').html($(params).attr("id"))
+                $('#computer').html(pc)
+                if ($(params).attr("id") == 'Pierre') {
+                    if (pc == 'Pierre') {
+                        $('#finish').html('Bien tenté !')
+                    } else if (pc == 'Feuille') {
+                        $('#finish').html('Huugh !')
+                        $("#good").addClass('hit')
+                        scorePc++
+                    } else if (pc == 'Ciseau') {
+                        $('#finish').html('Ahahah EZ !')
+                        $("#bad").addClass('hit')
+                        scoreJoueur++
+                    }
+                }
+
+                if ($(params).attr("id") == 'Feuille') {
+                    if (pc == 'Pierre') {
+                        $('#finish').html('Ahahah EZ !')
+                        $("#bad").addClass('hit')
+                        scoreJoueur++
+                    } else if (pc == 'Feuille') {
+                        $('#finish').html('Bien tenté !')
+                    } else if (pc == 'Ciseau') {
+                        $('#finish').html('Huugh !')
+                        $("#good").addClass('hit')
+                        scorePc++
+                    }
+                }
+
+                if ($(params).attr("id") == 'Ciseau') {
+                    if (pc == 'Pierre') {
+                        $('#finish').html('Huugh !')
+                        $("#good").addClass('hit')
+                        scorePc++
+                    } else if (pc == 'Feuille') {
+                        $('#finish').html('Ahahah EZ !')
+                        $("#bad").addClass('hit')
+                        scoreJoueur++
+                    } else if (pc == 'Ciseau') {
+                        $('#finish').html('Bien tenté !')
+                    }
+                }
+
+                $('#round').html( scoreJoueur + ' - ' + scorePc)
+
+                console.log('test')
+                winCondition()
+            }, 300)
+            setTimeout(function () {
+                $(params).removeClass('fight')
+            if (pc == 'Pierre') {
+                $("#ennemyPierre").removeClass('ennemyFight')
+            } else if (pc == 'Feuille') {
+                $("#ennemyFeuille").removeClass('ennemyFight')
+            } else if (pc == 'Ciseau') {
+                $("#ennemyCiseau").removeClass('ennemyFight')
             }
+            }, 1000)
+            
         }
+
+        function winCondition() {
+            if (scoreJoueur == 3) {
+                $("#allieEnd").html('VICTOIRE')
+                $("#ennemyEnd").html('DEFAITE')
+                $(".cards button").hide()
+                $("#restart").show()
+                $("#finish").html('Je suis plus PUISSANT !')
+            } else if (scorePc == 3) {
+                $("#ennemyEnd").html('VICTOIRE')
+                $("#allieEnd").html('DEFAITE')
+                $(".cards button").hide()
+                $("#restart").show()
+                $("#finish").html('Tu es trop PUISSANT !')
+
+            }
+            
+        }
+
+        $("#restart").click( function () {
+            scoreJoueur = 0
+            scorePc = 0
+            $("#restart").hide()
+            $(".cards button").show()
+            $('#round').html('')
+            $('#joueur').html('')
+            $('#computer').html('')
+            $("#ennemyEnd").html('')
+            $("#allieEnd").html('')
+            $('#finish').html('Encore !')
+            $("#restart").hide()
+        })
+
+        
 
 
     </script>
